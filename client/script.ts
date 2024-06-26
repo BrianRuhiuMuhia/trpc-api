@@ -9,7 +9,9 @@ const trpc = createTRPCClient<typeof appRouter>({
   ],
 });
 
-const books= await trpc.books.query()
+trpc.getbooks.query().then((books)=>{
 console.log(books)
+})
+
 
 
