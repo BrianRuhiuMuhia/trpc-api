@@ -9,9 +9,19 @@ const trpc = createTRPCClient<typeof appRouter>({
   ],
 });
 
-trpc.getbooks.query().then((books)=>{
-console.log(books)
+
+const newBook={
+  "name":"Attack On Titan",
+  "id":2,
+  "price":4000
+}
+trpc.addbook.mutate(newBook).then((response)=>{
+console.log(response)
 })
 
-
-
+trpc.deletebook.mutate(1).then((response)=>{
+  console.log(response)
+  })
+  trpc.getbooks.query().then((books)=>{
+    console.log(books)
+    })

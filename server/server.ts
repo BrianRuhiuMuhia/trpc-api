@@ -9,7 +9,7 @@ let booksArray=[{
  
 const appRouter = router({
   getbooks: publicProcedure
-    .query(() => {
+    .query(async () => {
      return booksArray
              
 }),
@@ -25,14 +25,39 @@ return item.id===input
     return book
   return new Error(`no book with id ${input}`)
 }),
-createBook:publicProcedure.input((obj:unknown)=>{
+addbook:publicProcedure.input((obj:unknown)=>{
   if(typeof obj==="object") return obj
   throw new Error("must be type of book")
 }).mutation(async(opts)=>{
+  try{
   const {input}=opts
-  let inputs:book|any=input
-  booksArray.push(inputs)
-})
+  let newbook:book|any=input
+  booksArray.push(newbook)
+  return newbook
+  }
+  catch(err){
+return "Server Error"
+  }
+
+}),
+deletebook:publicProcedure.input((id:unknown)=>{
+  if(typeof id === "number") return id
+  else throw new Error("id must be a number")
+}).mutation(async(opts)=>{
+  const {input}=opts
+  let id:number|any=input
+  return booksArray.filter((book)=>{
+return book.id!==id
+  })
+  
+}),
+updatebook:publicProcedure.input((obj:unknown)=>{
+  return obj
+  }).mutation(async (opts)=>{
+    const {input}=opts
+    let book:book|any=input
+    booksArray=[...booksArray,book]
+  })
 });
 const server = createHTTPServer({
     router: appRouter,
